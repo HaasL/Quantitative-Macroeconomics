@@ -1,0 +1,6 @@
+echo "# Quantitative-Macroeconomics" >> README.md
+git init
+git add README.md
+git commit -m "first commit"
+git remote add origin https://github.com/HaasL/Quantitative-Macroeconomics.git
+git push -u origin master
