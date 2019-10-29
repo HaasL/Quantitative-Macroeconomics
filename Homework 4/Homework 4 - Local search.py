@@ -54,7 +54,7 @@ Chi = np.zeros((N_k,N_k))
 negativ=-10000
 k_local=0
 i = 1 
-error=102 #102 is the 'right' search radius around k_t
+error=5 #seems to work for several error typs
 
 #3. Step: Creating the m-Matrix
 for ik, k in enumerate(k_grid): #ik is index number for the rows running from 0-->k_grid, while k in k_grid is an actual value
@@ -78,18 +78,18 @@ while i<10000:
             for jk, kk in enumerate(k_grid): #jk is the index number for the columns
                 Chi[ik,jk]=m[ik,jk]+beta*V[jk] #checking consumption >0
         else:                   #Creating for all ik>=1 Chi-Values in a certain radius(=error)
-            low=k_local-error
+            low=k_local
             high=k_local+error
             if low<0:   #Controlling for k-values in k_grid
                 low=0 
             if high>70: 
                 high=70
-            for jk in range (low, high): #radius or only considering right side due to monotonicity
+            for jk in range (low, high): #only considering right side due to monotonicity
                 Chi[ik,jk]=m[ik,jk]+beta*V[jk]        
         V_next[ik] = np.nanmax(Chi[ik,:]) #value
         k_policy[ik] = np.argmax(Chi[ik,:])   #position
         c_policy[ik] = y_func(k,1) +(1-delta)*k - k_policy[ik]   
-        k_local=k_policy[ik]   
+        k_local=int(k_policy[ik])
     if np.allclose(V_next,V): 
         V_result=V_next
         break 

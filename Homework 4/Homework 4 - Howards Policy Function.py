@@ -76,7 +76,7 @@ for ik, k in enumerate(k_grid):
 
 #Iterate for a 'i' times the Value Function
 #This is done to create starting values for the policy function iteration            
-while i<100: 
+while i<50: 
     start_time = time.time()
     if i<=1: 
         V=V_guess 
@@ -95,10 +95,15 @@ while i<100:
         i+=1
 
 V_use=V_next        
-#4. Generating a Value Function conditional on last policy function 
 
-Runs=[50,20,10,5] #Number of iterations for new Value functions before a new Policy Function is generated
+# =============================================================================
+# 1.4 Value Function - For 50 iterations
+# =============================================================================
+a=50
+#4. Generating a Value Function conditional on last policy function 
+Runs=[a,a,a,a,a,a] #Number of iterations for new Value functions before a new Policy Function is generated
 for A in Runs:
+    j+=1
     for i in range (0,A):
         for ik, k in enumerate(k_grid): #Creating a new Value Function 
             kk=k_policy[ik]
@@ -133,12 +138,11 @@ for A in Runs:
         break   
     else: 
         k_newpolicy=k_policy             #Checking if convergence was achieved
-        if A==5: 
-            print ('More iteration are necessary')
-    print (A)
-
+        
+  
+print(j,'iterations are necessary to converge')
 V_result=V_next    
-    
+   
 end_time = time.time()    
 print("total time taken this loop: ", end_time - start_time)    
 print('total number of iterations: ', i)     
@@ -159,3 +163,160 @@ plt.title ('Policy Functions')
 plt.legend()
 plt.xlabel('Time') 
 plt.show()
+
+
+# =============================================================================
+# 1.4 Value Function - For 20 iterations
+# =============================================================================
+a=20
+j=0
+#4. Generating a Value Function conditional on last policy function 
+Runs=[a,a,a,a,a,a] #Number of iterations for new Value functions before a new Policy Function is generated
+for A in Runs:
+    j+=1
+    for i in range (0,A):
+        for ik, k in enumerate(k_grid): #Creating a new Value Function 
+            kk=k_policy[ik]
+            kk=int(kk)
+            if k_grid[kk]<y_func(k,h)+(1-delta)*k:
+                kkk=k_grid[kk]
+                u=np.log(k**(1-theta)*h**theta+(1-delta)*k-kkk) 
+                V_next[ik] = u +beta*V_use[kk]   #checking consumption >0
+            else:
+                V_next[ik] = negativ
+        if np.allclose(V_next,V_use):  #Checking if convergence was achieved
+            V_result=V_next
+            print('Optimal Policy was computed in', A, i)
+            break
+        else: 
+            V_use=V_next
+    #After 'A' iterations: Create new policy function (capital) 
+    for ik, k in enumerate(k_grid): 
+        for jk, kk in enumerate(k_grid): 
+                Chi[ik,jk]=m[ik,jk]+beta*V_use[jk]
+        k_newpolicy[ik] = np.argmax(Chi[ik,:]) #position
+        V_next[ik] = np.nanmax(Chi[ik,:]) #value
+        c_policy[ik] =  y_func(k,h) +(1-delta)*k - k_newpolicy[ik]    
+    if np.allclose(V_next,V_use):        #Checking if convergence was achieved
+        V_result=V_next
+        print('Optimal Policy was computed in Policy Check', A, ik)
+        break
+    else:
+        V_use=V_next
+    if (k_newpolicy==k_policy).all():    #Checking if convergence was achieved
+        print('Optimal Policy was computed along new Policy')
+        break   
+    else: 
+        k_newpolicy=k_policy             #Checking if convergence was achieved
+
+print(j,'iteration is necessary to converge')
+V_result=V_next    
+    
+end_time = time.time()    
+print("total time taken this loop: ", end_time - start_time)    
+print('total number of iterations: ', i)     
+
+
+# =============================================================================
+# 1.4 Value Function - For 10 iterations
+# =============================================================================
+a=10
+j=0
+#4. Generating a Value Function conditional on last policy function 
+Runs=[a,a,a,a,a,a] #Number of iterations for new Value functions before a new Policy Function is generated
+for A in Runs:
+    j+=1
+    for i in range (0,A):
+        for ik, k in enumerate(k_grid): #Creating a new Value Function 
+            kk=k_policy[ik]
+            kk=int(kk)
+            if k_grid[kk]<y_func(k,h)+(1-delta)*k:
+                kkk=k_grid[kk]
+                u=np.log(k**(1-theta)*h**theta+(1-delta)*k-kkk) 
+                V_next[ik] = u +beta*V_use[kk]   #checking consumption >0
+            else:
+                V_next[ik] = negativ
+        if np.allclose(V_next,V_use):  #Checking if convergence was achieved
+            V_result=V_next
+            print('Optimal Policy was computed in', A, i)
+            break
+        else: 
+            V_use=V_next
+    #After 'A' iterations: Create new policy function (capital) 
+    for ik, k in enumerate(k_grid): 
+        for jk, kk in enumerate(k_grid): 
+                Chi[ik,jk]=m[ik,jk]+beta*V_use[jk]
+        k_newpolicy[ik] = np.argmax(Chi[ik,:]) #position
+        V_next[ik] = np.nanmax(Chi[ik,:]) #value
+        c_policy[ik] =  y_func(k,h) +(1-delta)*k - k_newpolicy[ik]    
+    if np.allclose(V_next,V_use):        #Checking if convergence was achieved
+        V_result=V_next
+        print('Optimal Policy was computed in Policy Check', A, ik)
+        break
+    else:
+        V_use=V_next
+    if (k_newpolicy==k_policy).all():    #Checking if convergence was achieved
+        print('Optimal Policy was computed along new Policy')
+        break   
+    else: 
+        k_newpolicy=k_policy             #Checking if convergence was achieved
+
+print(j,'iteration is necessary to converge')
+V_result=V_next    
+    
+end_time = time.time()    
+print("total time taken this loop: ", end_time - start_time)    
+print('total number of iterations: ', i)     
+
+
+# =============================================================================
+# 1.4 Value Function - For 5 iterations
+# =============================================================================
+a=5
+j=0
+#4. Generating a Value Function conditional on last policy function 
+Runs=[a,a,a,a,a,a] #Number of iterations for new Value functions before a new Policy Function is generated
+for A in Runs:
+    j+=1
+    for i in range (0,A):
+        for ik, k in enumerate(k_grid): #Creating a new Value Function 
+            kk=k_policy[ik]
+            kk=int(kk)
+            if k_grid[kk]<y_func(k,h)+(1-delta)*k:
+                kkk=k_grid[kk]
+                u=np.log(k**(1-theta)*h**theta+(1-delta)*k-kkk) 
+                V_next[ik] = u +beta*V_use[kk]   #checking consumption >0
+            else:
+                V_next[ik] = negativ
+        if np.allclose(V_next,V_use):  #Checking if convergence was achieved
+            V_result=V_next
+            print('Optimal Policy was computed in', A, i)
+            break
+        else: 
+            V_use=V_next
+    #After 'A' iterations: Create new policy function (capital) 
+    for ik, k in enumerate(k_grid): 
+        for jk, kk in enumerate(k_grid): 
+                Chi[ik,jk]=m[ik,jk]+beta*V_use[jk]
+        k_newpolicy[ik] = np.argmax(Chi[ik,:]) #position
+        V_next[ik] = np.nanmax(Chi[ik,:]) #value
+        c_policy[ik] =  y_func(k,h) +(1-delta)*k - k_newpolicy[ik]    
+    if np.allclose(V_next,V_use):        #Checking if convergence was achieved
+        V_result=V_next
+        print('Optimal Policy was computed in Policy Check', A, ik)
+        break
+    else:
+        V_use=V_next
+    if (k_newpolicy==k_policy).all():    #Checking if convergence was achieved
+        print('Optimal Policy was computed along new Policy')
+        break   
+    else: 
+        k_newpolicy=k_policy             #Checking if convergence was achieved
+
+print(j,'iterations is necessary to converge')
+V_result=V_next    
+    
+end_time = time.time()    
+print("total time taken this loop: ", end_time - start_time)    
+print('total number of iterations: ', i)     
+                
